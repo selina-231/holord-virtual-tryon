@@ -55,6 +55,9 @@ async function callNanoBanana(
         throw new Error(`❌ Clothing file not found: ${clothingFile}`);
       }
 
+      // get clothing size
+
+
       const clothingBuffer = fs.readFileSync(clothingPath);
       const clothingBase64 = clothingBuffer.toString("base64");
 
@@ -76,16 +79,16 @@ async function callNanoBanana(
       {
         text:
           clothingItems.length === 1
-            ? `${dimensionPrompt} Take the person from the first photo and realistically dress them in the clothing from the second photo. Keep the face, pose, body shape, lighting, and background identical. Only replace the clothing naturally with realistic folds, shadows, and proportions. CRITICAL: The output image dimensions MUST be ${finalWidth}x${finalHeight} pixels - exactly the same as the original photo.`
-            : `${dimensionPrompt} Take the person from the first photo and realistically dress them in the TOP from the second photo and BOTTOM from the third photo. Combine both clothing items naturally on the person. Keep the face, pose, body shape, lighting, and background identical. Make the outfit look realistic with proper folds, shadows, and proportions. CRITICAL: The output image dimensions MUST be ${finalWidth}x${finalHeight} pixels - exactly the same as the original photo.`,
+            ? `${dimensionPrompt} Take the person from the last photo and realistically dress them in the clothing from the first photo. Keep the face, pose, body shape, lighting, and background identical. Only replace the clothing naturally with realistic folds, shadows, and proportions. CRITICAL: The output image dimensions MUST be ${finalWidth}x${finalHeight} pixels - exactly the same as the original photo.`
+            : `${dimensionPrompt} Take the person from the last photo and realistically dress them in the TOP from the first photo and BOTTOM from the s  econd photo. Combine both clothing items naturally on the person. Keep the face, pose, body shape, lighting, and background identical. Make the outfit look realistic with proper folds, shadows, and proportions. CRITICAL: The output image dimensions MUST be ${finalWidth}x${finalHeight} pixels - exactly the same as the original photo.`,
       },
+      ...clothingParts,
       {
         inlineData: {
           mimeType: "image/jpeg",
           data: userPhotoBase64,
         },
       },
-      ...clothingParts,
     ];
 
     console.log(
@@ -94,6 +97,12 @@ async function callNanoBanana(
     console.log(`📏 Requesting exactly ${finalWidth}x${finalHeight} pixels`);
 
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
+    console.log(`API Key: ${GEMINI_API_KEY}`)
+
+    const config = {
+      
+    }
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-image",
